@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EmployeeRegister.Menu;
 
 namespace EmployeeRegister
 {
@@ -12,46 +13,40 @@ namespace EmployeeRegister
         public void Start(List<Employee>employeeListStore)
         {
             employeeList = employeeListStore;
-            string selectedAction;
+            InputChoice inputChoice;
             do
             {
                 PrintMenu();
-                selectedAction = Console.ReadLine();
-                switch (selectedAction)
+                inputChoice = new InputChoice(Console.ReadLine());
+
+                Console.WriteLine(inputChoice.Description);
+                switch (inputChoice.Input)
                 {
-                    case "1":
-                        Console.WriteLine("Adding new employee ...");
+                    case InputEnum.AddEmployee:                       
                         AddEmployee();
                         break;
-                    case "2":
-                        Console.WriteLine("Listing employees ...");
+                    case InputEnum.ListEmployees:
                         ListEmployees();
-                        break;
-                    default:
-                        Console.WriteLine("Invalid input");
                         break;
                 }
             }
-            while (selectedAction != "9");
-            Console.WriteLine("Exiting...");
+            while (inputChoice.Input != InputEnum.Exit);
+            Console.WriteLine(Language.ExitingEnglish);
         }
 
         private void PrintMenu()
         {
-            Console.WriteLine("Choose the action you want to do: ");
-            Console.WriteLine("1. Add employee");
-            Console.WriteLine("2. List employees");
-            Console.WriteLine("9. Exit");
+            Console.WriteLine(Language.ChooseEnglish);            
+            Console.WriteLine(InputChoice.GetDescriptionForInput(InputEnum.AddEmployee));
+            Console.WriteLine(InputChoice.GetDescriptionForInput(InputEnum.ListEmployees));
+            Console.WriteLine(InputChoice.GetDescriptionForInput(InputEnum.Exit));
         }
 
         public void AddEmployee()
         {
-            Console.WriteLine("Firstname:");
-            string firstname = Console.ReadLine();
-            Console.WriteLine("Lastname:");
-            string lastname = Console.ReadLine();
-            Console.WriteLine("Wage:");
-            int wage = int.Parse(Console.ReadLine());
+            string firstname = Util.AskForString(Language.EnterFirstNameEnglish, Language.FirstNameEnglish);
+            string lastname = Util.AskForString(Language.EnterLastNameEnglish, Language.LastNameEnglish);
+            int wage = Util.AskForInt(Language.EnterWageEnglish, Language.WageEnglish);
             employeeList.Add(new Employee(firstname, lastname, wage));
         }
 
